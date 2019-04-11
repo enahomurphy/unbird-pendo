@@ -1,0 +1,310 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <style>
+            /* vv Bootstrap imports vv */
+            /* License: https://github.com/twbs/bootstrap/blob/v4.0.0/LICENSE */
+            body {
+                padding: 10px;
+                margin: 0;
+                font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
+                font-size: 1rem;
+                font-weight: 400;
+                /*line-height: 1.5;*/
+                color: #212529;
+            }
+            *, ::after, ::before {
+                box-sizing: border-box;
+            }
+            .form-group {
+                margin-bottom: 1rem;
+            }
+            .form-group input,label,button  {
+                display: block;
+            }
+            .form-group label {
+                margin-bottom: .5rem;
+            }
+            .form-control {
+                display: block;
+                width: 100%;
+                padding: .3rem .5rem;
+                font-size: 1rem;
+                line-height: 1.5;
+                color: #495057;
+                background-color: #fff;
+                background-clip: padding-box;
+                border: 1px solid #ced4da;
+                border-radius: .25rem;
+                transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+            }
+            .was-validated:invalid {
+                border-color: #dc3545;
+            }
+            .was-validated:focus:invalid {
+                box-shadow: 0 0 0 0.2rem rgba(199, 23, 73, 0.5);
+                outline: 0;
+            }
+            .was-validated:valid {
+                border-color: #22c22a;
+            }
+            .was-validated:focus:valid {
+                box-shadow: 0 0 0 0.2rem rgba(52, 212, 52, 0.5);
+                outline: 0;
+            }
+
+            .was-validated:focus {
+                box-shadow: 0 0 0 0.2rem rgba(199, 23, 73, 0.5);
+                outline: 0;
+            }
+            select.form-control:not([size]):not([multiple]) {
+                height: calc(2.25rem + 2px);
+            }
+            .btn {
+                display: block;
+                width: 100%;
+
+                background-color: #ec2059;
+                border-color: #ec2059;
+                color: #fff;
+                border-radius: 30px;
+
+                font-weight: 400;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: middle;
+                user-select: none;
+                border: 1px solid transparent;
+                padding: .375rem .75rem;
+                font-size: 1rem;
+                line-height: 1.5;
+
+                transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+            }
+            .btn:not(:disabled):not(.disabled) {
+                cursor: pointer;
+            }
+            .btn:focus, .btn.focus {
+                box-shadow: 0 0 0 0.2rem rgba(199, 23, 73, 0.5);
+                outline: 0;
+            }
+            .btn:hover {
+                background-color: #af0b3a;
+                border-color: #af0b3a;
+            }
+            .btn:not(:disabled):not(.disabled):active, .btn:not(:disabled):not(.disabled).active, .show > .btn.dropdown-toggle {
+                background-color: #7c0628;
+                border-color: #7c0628;
+            }
+            .btn:not(:disabled):not(.disabled):active:focus, .btn:not(:disabled):not(.disabled).active:focus, .show > .btn.dropdown-toggle:focus {
+                box-shadow: 0 0 0 0.2rem rgba(199, 23, 73, 0.5);
+            }
+            .small, small {
+                font-size: 80%;
+                font-weight: 400;
+            }
+            a {
+                color: #007bff;
+                text-decoration: none;
+                background-color: transparent;
+            }
+            /* ^^ Bootstrap imports ^^ */
+
+            textarea {
+                resize: none;
+            }
+
+            .powered-by {
+                padding-top: 10px;
+                display: block;
+                width: 100%;
+                text-align: right;
+            }
+
+            *:focus {
+                box-shadow: 0 0 0 0.2rem rgba(199, 23, 73, 0.5);
+                outline: 0;
+            }
+        </style>
+    </head>
+    <body>
+        <form id="feedbackForm" name="feedbackForm" style="height: 100%; display: none">
+            <div class="form-group">
+                <label for="title">Title</label>
+                <input
+                    class="form-control"
+                    type="text"
+                    id="title"
+                    name="title"
+                    placeholder="Provide a short, descriptive title"
+                    onfocus="resetSendButton()"
+                    required
+                    >
+            </div>
+
+            <div class="form-group">
+                <label for="type">Type</label>
+                <select
+                        class="form-control"
+                        id="type"
+                        name="type"
+                        onfocus="resetSendButton()"
+                        required>
+                    <option value="" disabled selected>Select one</option>
+                    <option value="bug">Bug</option>
+                    <option value="feature">Feature Request</option>
+                    <option value="design">Design Issue</option>
+                </select>
+            </div>
+
+            <!-- TODO: Have this fill in the height -->
+            <div class="form-group" style="height: 100%">
+                <label for="description">Description</label>
+                <textarea
+                    class="form-control"
+                    id="description"
+                    placeholder="Tell us how to improve &ndash; the more detail the better"
+                    onfocus="resetSendButton()"
+                    required
+                    ></textarea>
+            </div>
+    
+            <div class="form-group" style="margin-bottom: 0px;">
+                <button class="btn" type="button" id="sendButton" name="sendButton" onclick="submitForm(event)">SEND</button>
+                <small class="powered-by">Feedback powered by <a href="https://www.unbird.com" target="_blank">Unbird</a></small>
+            </div>
+        </form>
+
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	    <script src="https://pendo-io-extensions.storage.googleapis.com/sdk/0.1.0/js/pendo-extensions-sdk.js"></script>
+        <script type = "text/javascript">
+
+            var apiKey;
+            var host = 'https://app.unbird.com';
+            var hasSent = false;
+
+            window.onload = function() {
+                // See https://github.com/pendo-io/resource-center-integration-kit
+                const client = PendoSDK.GetConnection("unbird-feedback");
+                client.initialize();
+
+                client.get('extension.config').then((result) => {
+                    if (result == null || result.data == null) {
+                        console.warn('Running outside of the Pendo iframe, unable to get config. Using local options');
+                        // Replace me when running locally
+                        apiKey = 'F2sjqH10JU2mPmhUnicnnFiT2ctu6j4r';
+                        host = 'http://localhost:3000'
+                        return;
+                    }
+                    console.log(result);
+                    apiKey = result.data.config.provider.options.apiKey;
+                });
+            }
+            
+            $("#feedbackForm").fadeIn(700);
+
+            function resetForm() {
+                var form = document.forms['feedbackForm'];
+
+                var titleElement = form.elements['title'];
+                titleElement.value = '';
+                titleElement.classList.remove('was-validated');
+
+                var typeElement = form.elements['type'];
+                typeElement.value = '';
+                typeElement.classList.remove('was-validated');
+
+                var descriptionElement = form.elements['description'];
+                descriptionElement.value = '';
+                descriptionElement.classList.remove('was-validated');
+            }
+
+            function resetSendButton() {
+                var sendButton = document.getElementById('sendButton');
+                sendButton.innerText = "SEND" + (hasSent === true ? " ANOTHER" : "");
+            }
+
+            function validateTitle() {
+                var element = document.getElementById('title');
+                element.classList.add("was-validated");
+                return element.value.length > 0;
+            }
+
+            function validateType() {
+                var element = document.getElementById('type');
+                element.classList.add("was-validated");
+                return element.value.length > 0;
+            }
+
+            function validateDescription() {
+                var element = document.getElementById('description');
+                element.classList.add("was-validated");
+                console.log('description validated');
+                return element.value.length > 0;
+            }
+
+            function validateForm() {
+                var valid = true;
+                if (!validateTitle()) {
+                    valid = false;
+                }
+                if (!validateType()) {
+                    valid = false;
+                }
+                if (!validateDescription()) {
+                    valid = false;
+                }
+                return valid;
+            }
+
+            function submitForm(event) {
+                if (apiKey == null) {
+                    console.error('No API Key has been loaded');
+                    return;
+                }
+
+                if (!validateForm()) {
+                    console.warn('Form not ready to submit')
+                    return;
+                }
+
+                var form = document.forms['feedbackForm'];
+                var sendButton = form.elements['sendButton'];
+
+                var title = form.elements['title'].value;
+                var type = form.elements['type'].value;
+                var description = form.elements['description'].value;
+
+                sendButton.innerText = "SENDING..."
+                sendButton.disable = true;
+                fetch(`${host}/widget/v2/entry/${apiKey}`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                        entry: description,
+                        properties: {
+                            type: type,
+                            title: title,
+                        },
+                    })
+                }).then(response => {
+                    if (response.status != 200) {
+                        throw Error(`Got non-success response ${response.status} ${response.statusText}`);
+                    }
+                    resetForm();
+                    // TODO: Replace with a success model/view
+                    sendButton.innerText = "Successfully sent!";
+                    sendButton.disable = false;
+                    hasSent = true;
+                }).catch(error => {
+                    console.log('Problem adding entry', error);
+                    sendButton.innerText = "TRY AGAIN";
+                    sendButton.disable = false;
+                })
+            }
+
+        </script>
+    </body>
+</html>

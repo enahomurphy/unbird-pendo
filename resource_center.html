@@ -231,17 +231,20 @@
             function resetForm() {
                 var form = document.forms['feedback-form'];
 
-                var titleElement = form.elements['title'];
-                titleElement.value = '';
-                titleElement.classList.remove('was-validated');
+                resetFormControlValue(form.elements['title']);
+                resetFormControlValue(form.elements['type']);
+                resetFormControlValue(form.elements['description']);
+            }
 
-                var typeElement = form.elements['type'];
-                typeElement.value = '';
-                typeElement.classList.remove('was-validated');
-
-                var descriptionElement = form.elements['description'];
-                descriptionElement.value = '';
-                descriptionElement.classList.remove('was-validated');
+            function validateForm() {
+                var valid = true;
+                var formControlIds = ['title', 'type', 'description'];
+                formControlIds.forEach(function (controlId) {
+                    if (!validateFormControlValue(document.getElementById(controlId))) {
+                        valid = false;
+                    }
+                });
+                return valid;
             }
 
             function resetSendButton() {
@@ -249,36 +252,14 @@
                 sendButton.innerText = "Send" + (hasSent === true ? " another" : "");
             }
 
-            function validateTitle() {
-                var element = document.getElementById('title');
+            function validateFormControlValue(element) {
                 element.classList.add("was-validated");
                 return element.value.length > 0;
             }
 
-            function validateType() {
-                var element = document.getElementById('type');
-                element.classList.add("was-validated");
-                return element.value.length > 0;
-            }
-
-            function validateDescription() {
-                var element = document.getElementById('description');
-                element.classList.add("was-validated");
-                return element.value.length > 0;
-            }
-
-            function validateForm() {
-                var valid = true;
-                if (!validateTitle()) {
-                    valid = false;
-                }
-                if (!validateType()) {
-                    valid = false;
-                }
-                if (!validateDescription()) {
-                    valid = false;
-                }
-                return valid;
+            function resetFormControlValue(element) {
+                element.classList.remove("was-validated");
+                element.value = '';
             }
 
             function submitForm(event) {

@@ -2,7 +2,7 @@
 <html lang="en">
     <head>
         <style>
-            /* vv Bootstrap imports vv */
+            /* vv (Mostly) Bootstrap imports vv */
             /* License: https://github.com/twbs/bootstrap/blob/v4.0.0/LICENSE */
             body {
                 padding: 10px;
@@ -10,7 +10,6 @@
                 font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
                 font-size: 1rem;
                 font-weight: 400;
-                /*line-height: 1.5;*/
                 color: #212529;
             }
             *, ::after, ::before {
@@ -68,6 +67,7 @@
                 border-color: #ec2059;
                 color: #fff;
                 border-radius: 30px;
+                text-transform: uppercase;
 
                 font-weight: 400;
                 text-align: center;
@@ -125,10 +125,37 @@
                 box-shadow: 0 0 0 0.2rem rgba(199, 23, 73, 0.5);
                 outline: 0;
             }
+
+            #feedback-form {
+                height: 100%;
+                /* Initial state before fade-in */
+                opacity: 0;
+            }
+
+            #bottom-group {
+                margin-bottom: 0px;
+            }
+
+            .fade-in {
+                opacity: 1 !important;
+                animation-name: fadeInOpacity;
+                animation-iteration-count: 1;
+                animation-timing-function: ease-in;
+                animation-duration: .3s;
+            }
+
+            @keyframes fadeInOpacity {
+                0% {
+                    opacity: 0;
+                }
+                100% {
+                    opacity: 1;
+                }
+            }
         </style>
     </head>
     <body>
-        <form id="feedbackForm" name="feedbackForm" style="height: 100%; display: none">
+        <form id="feedback-form" name="feedback-form" class="feedback-form">
             <div class="form-group">
                 <label for="title">Title</label>
                 <input
@@ -139,7 +166,7 @@
                     placeholder="Provide a short, descriptive title"
                     onfocus="resetSendButton()"
                     required
-                    >
+                    />
             </div>
 
             <div class="form-group">
@@ -158,7 +185,7 @@
             </div>
 
             <!-- TODO: Have this fill in the height -->
-            <div class="form-group" style="height: 100%">
+            <div class="form-group">
                 <label for="description">Description</label>
                 <textarea
                     class="form-control"
@@ -169,14 +196,13 @@
                     ></textarea>
             </div>
     
-            <div class="form-group" style="margin-bottom: 0px;">
-                <button class="btn" type="button" id="sendButton" name="sendButton" onclick="submitForm(event)">SEND</button>
+            <div class="form-group" id="bottom-group">
+                <button class="btn" type="button" id="send-button" name="send-button" onclick="submitForm(event)">SEND</button>
                 <small class="powered-by">Feedback powered by <a href="https://www.unbird.com" target="_blank">Unbird</a></small>
             </div>
         </form>
 
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-	    <script src="https://pendo-io-extensions.storage.googleapis.com/sdk/0.1.0/js/pendo-extensions-sdk.js"></script>
+        <script src="https://pendo-io-extensions.storage.googleapis.com/sdk/0.1.0/js/pendo-extensions-sdk.js"></script>
         <script type = "text/javascript">
 
             var apiKey;
@@ -193,18 +219,17 @@
                         console.warn('Running outside of the Pendo iframe, unable to get config. Using local options');
                         // Replace me when running locally
                         apiKey = 'F2sjqH10JU2mPmhUnicnnFiT2ctu6j4r';
-                        host = 'http://localhost:3000'
+                        host = 'http://localhost:3000';
                         return;
                     }
-                    console.log(result);
                     apiKey = result.data.config.provider.options.apiKey;
                 });
             }
-            
-            $("#feedbackForm").fadeIn(700);
+
+            document.getElementById('feedback-form').classList.add("fade-in");
 
             function resetForm() {
-                var form = document.forms['feedbackForm'];
+                var form = document.forms['feedback-form'];
 
                 var titleElement = form.elements['title'];
                 titleElement.value = '';
@@ -220,8 +245,8 @@
             }
 
             function resetSendButton() {
-                var sendButton = document.getElementById('sendButton');
-                sendButton.innerText = "SEND" + (hasSent === true ? " ANOTHER" : "");
+                var sendButton = document.getElementById('send-button');
+                sendButton.innerText = "Send" + (hasSent === true ? " another" : "");
             }
 
             function validateTitle() {
@@ -239,7 +264,6 @@
             function validateDescription() {
                 var element = document.getElementById('description');
                 element.classList.add("was-validated");
-                console.log('description validated');
                 return element.value.length > 0;
             }
 
@@ -268,8 +292,8 @@
                     return;
                 }
 
-                var form = document.forms['feedbackForm'];
-                var sendButton = form.elements['sendButton'];
+                var form = document.forms['feedback-form'];
+                var sendButton = form.elements['send-button'];
 
                 var title = form.elements['title'].value;
                 var type = form.elements['type'].value;
@@ -290,17 +314,16 @@
                         },
                     })
                 }).then(response => {
-                    if (response.status != 200) {
+                    if (response.status !== 200) {
                         throw Error(`Got non-success response ${response.status} ${response.statusText}`);
                     }
                     resetForm();
-                    // TODO: Replace with a success model/view
                     sendButton.innerText = "Successfully sent!";
                     sendButton.disable = false;
                     hasSent = true;
                 }).catch(error => {
                     console.log('Problem adding entry', error);
-                    sendButton.innerText = "TRY AGAIN";
+                    sendButton.innerText = "Try again";
                     sendButton.disable = false;
                 })
             }

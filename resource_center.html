@@ -5,14 +5,12 @@
             /* vv (Mostly) Bootstrap imports vv */
             /* License: https://github.com/twbs/bootstrap/blob/v4.0.0/LICENSE */
             body {
-                padding: 10px;
+                padding: 0 10px 10px 10px;
                 margin: 0;
                 font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif,"Apple Color Emoji","Segoe UI Emoji","Segoe UI Symbol";
                 font-size: 1rem;
                 font-weight: 400;
                 color: #6a6b75;
-                border-top: 1px solid #ced4da;
-                border-radius: .25rem;
             }
             *, ::after, ::before {
                 box-sizing: border-box;
@@ -24,14 +22,14 @@
                 display: block;
             }
             .form-group label {
-                margin-left: .5rem;
+                margin-left: .3rem;
                 margin-bottom: .4rem;
                 font-weight: 400;
             }
             .form-control {
                 display: block;
                 width: 100%;
-                padding: .5rem .4rem;
+                padding: .3rem .3rem;
                 font-size: .8rem;
                 line-height: 1.5;
                 color: #6a6b75;
@@ -61,7 +59,7 @@
                 outline: 0;
             }
             select.form-control:not([size]):not([multiple]) {
-                height: calc(2.25rem + 2px);
+                height: calc(1.8rem + 2px);
             }
             .btn {
                 display: block;
@@ -136,11 +134,13 @@
                 height: 100%;
                 /* Initial state before fade-in */
                 opacity: 0;
+                border-top: 1px solid #ececec;
+                padding-top: 1rem;
             }
 
             #bottom-group {
                 margin-bottom: 0px;
-                margin-top: 1.5rem;
+                margin-top: 2rem;
             }
 
             .fade-in {
@@ -218,7 +218,7 @@
             <div class="form-group" id="bottom-group">
                 <button class="btn" type="button" id="send-button" name="send-button" onclick="submitForm(event)">SEND</button>
                 <!-- Powered matches that of Drift chat -->
-                <small class="powered-by">Feedback <span class="inline-icon-container"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.15 12.64"><g data-name="Layer 2"><g data-name="Layer 1"><path fill="#fcf4a0" d="M6.58.75L.75 7.06h3.54l-1.95 4.83L8.4 5.24H4.57L6.58.75z"></path><path d="M6.58.75l-2 4.49H8.4l-6.06 6.65 2-4.83H.75L6.58.75m0-.75a.67.67 0 0 0-.37.11.65.65 0 0 0-.21.13L.2 6.55a.75.75 0 0 0 .55 1.26h2.43l-1.54 3.8a.76.76 0 0 0 .3.92.8.8 0 0 0 .4.11.74.74 0 0 0 .55-.24L9 5.75a.75.75 0 0 0-.6-1.26H5.73L7.24 1.1a.68.68 0 0 0 .09-.35.75.75 0 0 0-.74-.75zm0 1.5z" fill="#f4a51f"></path></g></g></svg></i></span> by <a href="https://www.unbird.com" target="_blank">Unbird</a></small>
+                <small class="powered-by">Feedback<span class="inline-icon-container"><i><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9.15 12.64"><g data-name="Layer 2"><g data-name="Layer 1"><path fill="#fcf4a0" d="M6.58.75L.75 7.06h3.54l-1.95 4.83L8.4 5.24H4.57L6.58.75z"></path><path d="M6.58.75l-2 4.49H8.4l-6.06 6.65 2-4.83H.75L6.58.75m0-.75a.67.67 0 0 0-.37.11.65.65 0 0 0-.21.13L.2 6.55a.75.75 0 0 0 .55 1.26h2.43l-1.54 3.8a.76.76 0 0 0 .3.92.8.8 0 0 0 .4.11.74.74 0 0 0 .55-.24L9 5.75a.75.75 0 0 0-.6-1.26H5.73L7.24 1.1a.68.68 0 0 0 .09-.35.75.75 0 0 0-.74-.75zm0 1.5z" fill="#f4a51f"></path></g></g></svg></i></span>by <a href="https://www.unbird.com" target="_blank">Unbird</a></small>
             </div>
         </form>
 

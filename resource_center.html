@@ -2,6 +2,9 @@
 <html lang="en">
     <head>
         <style>
+            html {
+                height: 100%;
+            }
             /* vv (Mostly) Bootstrap imports vv */
             /* License: https://github.com/twbs/bootstrap/blob/v4.0.0/LICENSE */
             body {
@@ -11,6 +14,7 @@
                 font-size: 1rem;
                 font-weight: 400;
                 color: #6a6b75;
+                height: 100%;
             }
             *, ::after, ::before {
                 box-sizing: border-box;
@@ -160,6 +164,12 @@
                 }
             }
 
+            .fill {
+                display: flex;
+                height: 100%;
+                flex-direction: column;
+            }
+
             .inline-icon-container {
                 vertical-align: middle;
                 display: inline-block;
@@ -171,10 +181,14 @@
                 width: auto;
                 max-width: 12px;
             }
+
+            #description {
+                flex: 1;
+            }
         </style>
     </head>
     <body>
-        <form id="feedback-form" name="feedback-form" class="feedback-form">
+        <form id="feedback-form" name="feedback-form" class="feedback-form fill">
             <div class="form-group">
                 <label for="title">Title</label>
                 <input
@@ -204,7 +218,7 @@
             </div>
 
             <!-- TODO: Have this fill in the height -->
-            <div class="form-group">
+            <div class="form-group fill">
                 <label for="description">Description</label>
                 <textarea
                     class="form-control"
@@ -243,6 +257,13 @@
                         return;
                     }
                     apiKey = result.data.config.provider.options.apiKey;
+                    if (result.data.config.options.stylesheet != null) {
+                        var customStyleLink = document.createElement("link");
+                        customStyleLink.rel = "stylesheet";
+                        customStyleLink.type = "text/css";
+                        customStyleLink.href = result.data.config.options.stylesheet;
+                        document.getElementsByTagName("head")[0].appendChild(customStyleLink)
+                    }
                 });
             }
 

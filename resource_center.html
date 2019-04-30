@@ -242,11 +242,30 @@
             var apiKey;
             var host = 'https://app.unbird.com';
             var hasSent = false;
+            var extraProperties = {};
 
             window.onload = function() {
                 // See https://github.com/pendo-io/resource-center-integration-kit
                 const client = PendoSDK.GetConnection("unbird-feedback");
                 client.initialize();
+
+                client.get('metadata').then((result) => {
+                    if (result != null && result.data != null) {
+                        const visitorData = result.data.metadata.visitor;
+                        if (visitorData != null) {
+                            Object.keys(visitorData).forEach(function(key) {
+                                extraProperties['pendo_visitor_' + key] = visitorData[key];
+                            });
+                        }
+
+                        const accountData = result.data.metadata.account;
+                        if (accountData != null) {
+                            Object.keys(accountData).forEach(function(key) {
+                                extraProperties['pendo_account_' + key] = accountData[key];
+                            });
+                        }
+                    }
+                });
 
                 client.get('extension.config').then((result) => {
                     if (result == null || result.data == null) {
@@ -320,6 +339,13 @@
                 var title = form.elements['title'].value;
                 var type = form.elements['type'].value;
                 var description = form.elements['description'].value;
+                var fieldProperties = {
+                    type: type,
+                    title: title,
+                };
+                Object.keys(extraProperties).forEach(function(key) {
+                    fieldProperties[key] = extraProperties[key];
+                });
 
                 sendButton.innerText = "SENDING..."
                 sendButton.disable = true;
@@ -330,10 +356,7 @@
                     },
                     body: JSON.stringify({
                         entry: description,
-                        properties: {
-                            type: type,
-                            title: title,
-                        },
+                        properties: fieldProperties,
                     })
                 }).then(response => {
                     if (response.status !== 200) {
